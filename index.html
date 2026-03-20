@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cykling METs-kalkylator</title>
+    <style>
+        :root { --primary: #27ae60; --dark: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; color: #333; max-width: 600px; margin: 40px auto; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: var(--dark); border-bottom: 3px solid var(--primary); display: inline-block; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 6px; cursor: pointer; width: 100%; font-size: 1.1rem; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #219150; }
+        #result { margin-top: 25px; padding: 20px; border-radius: 8px; display: none; background: #eef9f1; border-left: 5px solid var(--primary); }
+        footer { margin-top: 40px; text-align: center; font-size: 0.8rem; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Cykling METs</h1>
+    
+    <div class="form-group">
+        <label for="weight">Vikt (kg)</label>
+        <input type="number" id="weight" placeholder="Ex: 80" step="0.1">
+    </div>
+
+    <div class="form-group">
+        <label for="watt">Belastning (Watt)</label>
+        <input type="number" id="watt" placeholder="Ex: 150">
+    </div>
+
+    <button onclick="calculateMETs()">Beräkna METs</button>
+
+    <div id="result"></div>
+</div>
+
+<footer>
+    Baserat på ACSM:s metabola ekvationer för cykelergometri.<br>
+    $\text{VO}_2 = (1.8 \cdot \text{Work Rate} / \text{Mass}) + 7$
+</footer>
+
+<script>
+    function calculateMETs() {
+        const weight = parseFloat(document.getElementById('weight').value);
+        const watt = parseFloat(document.getElementById('watt').value);
+        const resultDiv = document.getElementById('result');
+
+        if (!weight || !watt) {
+            alert("Vänligen fyll i både vikt och watt.");
+            return;
+        }
+
+        // 1 Watt = 6.12 kgm/min
+        const workRate = watt * 6.12;
+        
+        // ACSM Formel: VO2 (ml/kg/min) = (1.8 * kgm/min / kg) + 3.5 (vilo) + 3.5 (pedalmotstånd)
+        // Totalt tillägg är 7 ml/kg/min för cykling
+        const vo2 = (1.8 * workRate / weight) + 7;
+        
+        // 1 MET = 3.5 ml/kg/min
+        const mets = vo2 / 3.5;
+
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `
+            <strong>Resultat:</strong><br>
+            Beräknad syreförbrukning: <strong>${vo2.toFixed(1)} ml/kg/min</strong><br>
+            Intensitet: <strong>${mets.toFixed(1)} METs</strong>
+        `;
+    }
+</script>
+
+</body>
+</html>
