@@ -3,127 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METs-kalkylator | Monark & FRIEND-normer</title>
+    <title>METs Kalkylator</title>
     <style>
         :root { --primary: #2c3e50; --esc-green: #27ae60; --esc-yellow: #f1c40f; --esc-red: #e74c3c; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); padding: 20px; color: #333; max-width: 700px; margin: 40px auto; }
-        .card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h1 { color: var(--primary); font-size: 1.6rem; border-bottom: 3px solid var(--esc-green); display: inline-block; margin-bottom: 25px; margin-top: 0; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); padding: 15px; color: #333; max-width: 750px; margin: 20px auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary); font-size: 1.8rem; margin: 0 0 20px 0; text-align: center; }
+        
+        /* Tabs */
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: bold; color: #7f8c8d; transition: 0.3s; }
+        .tab.active { color: var(--esc-green); border-bottom: 3px solid var(--esc-green); }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; color: #444; font-size: 0.9rem; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
-        input:focus { border-color: var(--esc-green); outline: none; }
-        button { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; font-weight: bold; margin-top: 10px; transition: 0.2s; }
-        button:hover { opacity: 0.9; }
-        #result { margin-top: 25px; padding: 25px; border-radius: 8px; display: none; text-align: center; }
-        .met-value { font-size: 3.5rem; font-weight: 800; display: block; margin: 5px 0; }
-        .percentile-info { font-size: 1.1rem; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.1); }
-        footer { margin-top: 40px; text-align: center; font-size: 0.8rem; color: #95a5a6; line-height: 1.6; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; font-size: 0.85rem; }
+        input, select { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        
+        /* DASI List */
+        .dasi-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; cursor: pointer; }
+        .dasi-item:hover { background: #f9f9f9; }
+        .dasi-item input { width: auto; margin-right: 15px; transform: scale(1.3); }
+
+        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; font-weight: bold; margin-top: 10px; }
+        
+        #result { margin-top: 20px; padding: 20px; border-radius: 8px; display: none; text-align: center; }
+        .met-value { font-size: 3rem; font-weight: 800; display: block; }
+        footer { margin-top: 30px; text-align: center; font-size: 0.75rem; color: #95a5a6; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Arbetsprov: METs & Normer</h1>
+    <h1>METs</h1>
     
-    <div class="grid">
-        <div class="form-group">
-            <label for="age">Ålder</label>
-            <input type="number" id="age" placeholder="År" min="20" max="95">
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('ergometry')">Arbetsprov (Monark)</div>
+        <div class="tab" onclick="switchTab('dasi')">Klinisk skattning (DASI)</div>
+    </div>
+
+    <div id="ergometry-content">
+        <div class="grid">
+            <div class="form-group"><label>Ålder</label><input type="number" id="age" placeholder="År"></div>
+            <div class="form-group">
+                <label>Kön</label>
+                <select id="gender"><option value="male">Man</option><option value="female">Kvinna</option></select>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="gender">Kön</label>
-            <select id="gender">
-                <option value="male">Man</option>
-                <option value="female">Kvinna</option>
-            </select>
+        <div class="grid">
+            <div class="form-group"><label>Vikt (kg)</label><input type="number" id="weight" step="0.1"></div>
+            <div class="form-group"><label>Watt (Max)</label><input type="number" id="watt" placeholder="W på Monark"></div>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="form-group">
-            <label for="weight">Vikt (kg)</label>
-            <input type="number" id="weight" placeholder="kg" step="0.1">
-        </div>
-        <div class="form-group">
-            <label for="watt">Maxbelastning (Watt)</label>
-            <input type="number" id="watt" placeholder="W">
-        </div>
+    <div id="dasi-content" style="display:none;">
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Markera de aktiviteter patienten klarar av att utföra:</p>
+        <div id="dasi-list">
+            </div>
     </div>
 
-    <button onclick="calculate()">Beräkna Funktionell Kapacitet</button>
+    <button onclick="calculate()">Beräkna Kapacitet</button>
 
-    <div id="result"></div>
+    <div id="result">
+        <span id="status-text" style="font-weight:bold; text-transform:uppercase;"></span>
+        <span id="met-res" class="met-value"></span>
+        <span id="extra-info" style="font-size: 0.9rem; color: #555;"></span>
+    </div>
 </div>
 
 <footer>
-    <strong>Standard:</strong> Monark-ergometri (Watt × 6.12).<br>
-    <strong>Referensdata:</strong> FRIEND-registret för åldersmatchad VO₂max.<br>
-    <em>METs = [((1.8 × v) / kg) + 7] / 3.5. Bedömningen följer ESC Guidelines.</em>
+    <strong>Referenser:</strong> Monark Ergometri (Watt × 6.12) & FRIEND-data.<br>
+    Dukes Activity Status Index (Hlatky et al, 1989). METs = (0.43 × DASI) + 9.6 / 3.5.
 </footer>
 
 <script>
-    // Förenklade FRIEND-data (50:e percentilen VO2max per åldersgrupp)
-    const friendNorms = {
-        male: [
-            { age: 29, vo2: 43.3 }, { age: 39, vo2: 41.0 }, { age: 49, vo2: 37.8 }, 
-            { age: 59, vo2: 34.5 }, { age: 69, vo2: 30.7 }, { age: 79, vo2: 26.9 }, { age: 99, vo2: 22.0 }
-        ],
-        female: [
-            { age: 29, vo2: 34.7 }, { age: 39, vo2: 32.2 }, { age: 49, vo2: 29.5 }, 
-            { age: 59, vo2: 26.5 }, { age: 69, vo2: 23.3 }, { age: 79, vo2: 20.8 }, { age: 99, vo2: 17.0 }
-        ]
-    };
+    const dasiQuestions = [
+        { text: "Personlig hygien (tvätta sig, klä sig)?", val: 2.75 },
+        { text: "Gå inomhus, t.ex. i huset?", val: 1.75 },
+        { text: "Gå 1-2 kvarter på jämn mark utomhus?", val: 2.75 },
+        { text: "Gå uppför en trappa eller en backe?", val: 5.50 },
+        { text: "Springa en kort sträcka?", val: 8.00 },
+        { text: "Lätt hushållsarbete (damma, diska)?", val: 2.70 },
+        { text: "Tungt hushållsarbete (dammsuga, bära matkassar)?", val: 4.50 },
+        { text: "Trädgårdsarbete (klippa gräs, kratta)?", val: 4.50 },
+        { text: "Sexuell aktivitet?", val: 5.25 },
+        { text: "Måttlig fritidsaktivitet (golf, dans, bowling)?", val: 6.00 },
+        { text: "Ansträngande sport (simning, tennis, cykling)?", val: 7.50 }
+    ];
 
-    function getExpectedVO2(gender, age) {
-        const norms = friendNorms[gender];
-        return norms.find(n => age <= n.age).vo2;
+    let currentTab = 'ergometry';
+
+    function initDasi() {
+        const container = document.getElementById('dasi-list');
+        dasiQuestions.forEach((q, i) => {
+            container.innerHTML += `
+                <div class="dasi-item" onclick="document.getElementById('d${i}').click()">
+                    <input type="checkbox" id="d${i}" value="${q.val}" onclick="event.stopPropagation()">
+                    <span>${q.text}</span>
+                </div>`;
+        });
+    }
+    initDasi();
+
+    function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById('ergometry-content').style.display = tab === 'ergometry' ? 'block' : 'none';
+        document.getElementById('dasi-content').style.display = tab === 'dasi' ? 'block' : 'none';
+        document.getElementById('result').style.display = 'none';
     }
 
     function calculate() {
-        const age = parseInt(document.getElementById('age').value);
-        const gender = document.getElementById('gender').value;
-        const kg = parseFloat(document.getElementById('weight').value);
-        const w = parseFloat(document.getElementById('watt').value);
-        const res = document.getElementById('result');
-
-        if (!age || !kg || !w) {
-            alert("Vänligen fyll i alla fält.");
-            return;
-        }
-
-        // Beräkning (Monark standard)
-        const vo2 = (1.8 * (w * 6.12) / kg) + 7;
-        const mets = vo2 / 3.5;
-        const expectedVO2 = getExpectedVO2(gender, age);
-        const percentOfNorm = (vo2 / expectedVO2) * 100;
-
-        // ESC-tolkning
-        let color = ""; let border = ""; let statusText = "";
-
-        if (mets < 5 || percentOfNorm < 75) {
-            color = "#f9ebea"; border = "#e74c3c"; statusText = "Nedsatt kapacitet";
-        } else if (percentOfNorm >= 75 && percentOfNorm < 100) {
-            color = "#fef9e7"; border = "#f1c40f"; statusText = "Normal nedre gräns";
+        let mets = 0;
+        let info = "";
+        
+        if (currentTab === 'ergometry') {
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const kg = parseFloat(document.getElementById('weight').value);
+            const w = parseFloat(document.getElementById('watt').value);
+            if (!kg || !w) return;
+            const vo2 = (1.8 * (w * 6.12) / kg) + 7;
+            mets = vo2 / 3.5;
+            info = `Baserat på maximal belastning (${vo2.toFixed(1)} ml/kg/min)`;
         } else {
-            color = "#eafaf1"; border = "#27ae60"; statusText = "God kapacitet";
+            let dasiScore = 0;
+            dasiQuestions.forEach((_, i) => {
+                if (document.getElementById(`d${i}`).checked) dasiScore += dasiQuestions[i].val;
+            });
+            // VO2 = (0.43 * DASI) + 9.6
+            const vo2Est = (0.43 * dasiScore) + 9.6;
+            mets = vo2Est / 3.5;
+            info = `Uppskattat via Dukes Activity Status Index (Score: ${dasiScore.toFixed(1)})`;
         }
 
-        res.style.display = 'block';
-        res.style.backgroundColor = color;
-        res.style.border = `2px solid ${border}`;
-        res.innerHTML = `
-            <span style="font-weight:bold; text-transform:uppercase; color:${border}">${statusText}</span>
-            <span class="met-value" style="color:${border}">${mets.toFixed(1)}</span>
-            <span style="color:#555; font-weight:bold;">METs</span>
-            <div class="percentile-info">
-                ${percentOfNorm.toFixed(0)}% av förväntat för åldern<br>
-                <small style="color:#777">Förväntat: ${(expectedVO2/3.5).toFixed(1)} METs (${expectedVO2.toFixed(1)} ml/kg/min)</small>
-            </div>
-        `;
+        const resDiv = document.getElementById('result');
+        let color = mets < 5 ? "#e74c3c" : (mets < 10 ? "#f1c40f" : "#27ae60");
+        
+        resDiv.style.display = 'block';
+        resDiv.style.backgroundColor = color + "15"; 
+        resDiv.style.border = `2px solid ${color}`;
+        
+        document.getElementById('met-res').innerText = mets.toFixed(1);
+        document.getElementById('met-res').style.color = color;
+        document.getElementById('status-text').innerText = mets < 4 ? "Låg kapacitet" : "Funktionell kapacitet";
+        document.getElementById('status-text').style.color = color;
+        document.getElementById('extra-info').innerHTML = info;
     }
 </script>
-
 </body>
 </html>
