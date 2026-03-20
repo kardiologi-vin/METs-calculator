@@ -3,33 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METs Kalkylator</title>
+    <title>METs Kalkylator | Kardiologi</title>
     <style>
-        :root { --primary: #2c3e50; --esc-green: #27ae60; --esc-yellow: #f1c40f; --esc-red: #e74c3c; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); padding: 15px; color: #333; max-width: 750px; margin: 20px auto; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h1 { color: var(--primary); font-size: 1.8rem; margin: 0 0 20px 0; text-align: center; }
+        :root { 
+            --primary: #2c3e50; 
+            --esc-green: #27ae60; 
+            --esc-yellow: #f1c40f; 
+            --esc-red: #e74c3c; 
+            --bg: #f4f7f6; 
+        }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--bg); 
+            padding: 15px; 
+            color: #333; 
+            max-width: 750px; 
+            margin: 20px auto; 
+        }
+        .card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+        h1 { 
+            color: var(--primary); 
+            font-size: 1.8rem; 
+            margin: 0 0 20px 0; 
+            text-align: center; 
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
         
-        /* Tabs */
-        .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
-        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-weight: bold; color: #7f8c8d; transition: 0.3s; }
-        .tab.active { color: var(--esc-green); border-bottom: 3px solid var(--esc-green); }
+        /* Flikar */
+        .tabs { 
+            display: flex; 
+            margin-bottom: 20px; 
+            background: #eee;
+            border-radius: 8px;
+            padding: 4px;
+        }
+        .tab { 
+            flex: 1; 
+            padding: 12px; 
+            text-align: center; 
+            cursor: pointer; 
+            font-weight: bold; 
+            color: #7f8c8d; 
+            transition: 0.3s; 
+            border-radius: 6px;
+        }
+        .tab.active { 
+            background: white;
+            color: var(--primary); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 15px; 
+        }
         .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; font-size: 0.85rem; }
-        input, select { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        label { 
+            display: block; 
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            color: #444; 
+            font-size: 0.85rem; 
+        }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #eee; 
+            border-radius: 8px; 
+            font-size: 1rem; 
+            box-sizing: border-box; 
+        }
         
-        /* DASI List */
-        .dasi-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; cursor: pointer; }
+        /* DASI-lista */
+        .dasi-item { 
+            display: flex; 
+            align-items: center; 
+            padding: 12px; 
+            border-bottom: 1px solid #f0f0f0; 
+            font-size: 0.95rem; 
+            cursor: pointer; 
+        }
         .dasi-item:hover { background: #f9f9f9; }
-        .dasi-item input { width: auto; margin-right: 15px; transform: scale(1.3); }
+        .dasi-item input { 
+            width: auto; 
+            margin-right: 15px; 
+            transform: scale(1.4); 
+        }
 
-        button { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; font-weight: bold; margin-top: 10px; }
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            margin-top: 15px; 
+        }
+        button:hover { opacity: 0.9; }
         
-        #result { margin-top: 20px; padding: 20px; border-radius: 8px; display: none; text-align: center; }
-        .met-value { font-size: 3rem; font-weight: 800; display: block; }
-        footer { margin-top: 30px; text-align: center; font-size: 0.75rem; color: #95a5a6; }
+        /* Resultatsektion */
+        #result { 
+            margin-top: 25px; 
+            padding: 25px; 
+            border-radius: 10px; 
+            display: none; 
+            text-align: center; 
+        }
+        .met-value { 
+            font-size: 4rem; 
+            font-weight: 800; 
+            display: block; 
+            line-height: 1;
+            margin: 10px 0;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        footer { 
+            margin-top: 40px; 
+            text-align: center; 
+            font-size: 0.8rem; 
+            color: #95a5a6; 
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -38,8 +152,8 @@
     <h1>METs</h1>
     
     <div class="tabs">
-        <div class="tab active" onclick="switchTab('ergometry')">Arbetsprov (Monark)</div>
-        <div class="tab" onclick="switchTab('dasi')">Klinisk skattning (DASI)</div>
+        <div id="tab-erg" class="tab active" onclick="switchTab('ergometry')">Arbetsprov (Monark)</div>
+        <div id="tab-dasi" class="tab" onclick="switchTab('dasi')">Klinisk skattning (DASI)</div>
     </div>
 
     <div id="ergometry-content">
@@ -51,37 +165,39 @@
             </div>
         </div>
         <div class="grid">
-            <div class="form-group"><label>Vikt (kg)</label><input type="number" id="weight" step="0.1"></div>
-            <div class="form-group"><label>Watt (Max)</label><input type="number" id="watt" placeholder="W på Monark"></div>
+            <div class="form-group"><label>Vikt (kg)</label><input type="number" id="weight" step="0.1" placeholder="kg"></div>
+            <div class="form-group"><label>Maxbelastning (Watt)</label><input type="number" id="watt" placeholder="W på ergometer"></div>
         </div>
     </div>
 
     <div id="dasi-content" style="display:none;">
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Markera de aktiviteter patienten klarar av att utföra:</p>
-        <div id="dasi-list">
-            </div>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px; font-style: italic;">
+            Markera de aktiviteter patienten klarar av utan begränsande symtom:
+        </p>
+        <div id="dasi-list"></div>
     </div>
 
     <button onclick="calculate()">Beräkna Kapacitet</button>
 
     <div id="result">
-        <span id="status-text" style="font-weight:bold; text-transform:uppercase;"></span>
+        <div id="status-badge" class="status-badge"></div>
         <span id="met-res" class="met-value"></span>
-        <span id="extra-info" style="font-size: 0.9rem; color: #555;"></span>
+        <span id="extra-info" style="font-size: 1rem; color: #444; font-weight: 500;"></span>
     </div>
 </div>
 
 <footer>
-    <strong>Referenser:</strong> Monark Ergometri (Watt × 6.12) & FRIEND-data.<br>
-    Dukes Activity Status Index (Hlatky et al, 1989). METs = (0.43 × DASI) + 9.6 / 3.5.
+    <strong>Referenser:</strong><br>
+    Monark Ergometri: METs = [((1.8 × (W × 6.12)) / kg) + 7] / 3.5.<br>
+    DASI (Hlatky et al): METs = ((0.43 × DASI-score) + 9.6) / 3.5.
 </footer>
 
 <script>
     const dasiQuestions = [
         { text: "Personlig hygien (tvätta sig, klä sig)?", val: 2.75 },
-        { text: "Gå inomhus, t.ex. i huset?", val: 1.75 },
-        { text: "Gå 1-2 kvarter på jämn mark utomhus?", val: 2.75 },
-        { text: "Gå uppför en trappa eller en backe?", val: 5.50 },
+        { text: "Gå inomhus, t.ex. i hemmet?", val: 1.75 },
+        { text: "Gå 100-200 meter på jämn mark utomhus?", val: 2.75 },
+        { text: "Gå uppför trappor (ca 2 våningar) utan att stanna?", val: 5.50 },
         { text: "Springa en kort sträcka?", val: 8.00 },
         { text: "Lätt hushållsarbete (damma, diska)?", val: 2.70 },
         { text: "Tungt hushållsarbete (dammsuga, bära matkassar)?", val: 4.50 },
@@ -91,24 +207,29 @@
         { text: "Ansträngande sport (simning, tennis, cykling)?", val: 7.50 }
     ];
 
-    let currentTab = 'ergometry';
-
     function initDasi() {
         const container = document.getElementById('dasi-list');
         dasiQuestions.forEach((q, i) => {
             container.innerHTML += `
-                <div class="dasi-item" onclick="document.getElementById('d${i}').click()">
+                <div class="dasi-item" onclick="toggleCheck(${i})">
                     <input type="checkbox" id="d${i}" value="${q.val}" onclick="event.stopPropagation()">
                     <span>${q.text}</span>
                 </div>`;
         });
     }
+
+    function toggleCheck(i) {
+        const cb = document.getElementById('d' + i);
+        cb.checked = !cb.checked;
+    }
+
     initDasi();
 
+    let currentTab = 'ergometry';
     function switchTab(tab) {
         currentTab = tab;
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        event.target.classList.add('active');
+        document.getElementById('tab-erg').classList.toggle('active', tab === 'ergometry');
+        document.getElementById('tab-dasi').classList.toggle('active', tab === 'dasi');
         document.getElementById('ergometry-content').style.display = tab === 'ergometry' ? 'block' : 'none';
         document.getElementById('dasi-content').style.display = tab === 'dasi' ? 'block' : 'none';
         document.getElementById('result').style.display = 'none';
@@ -119,11 +240,10 @@
         let info = "";
         
         if (currentTab === 'ergometry') {
-            const age = parseInt(document.getElementById('age').value);
-            const gender = document.getElementById('gender').value;
             const kg = parseFloat(document.getElementById('weight').value);
             const w = parseFloat(document.getElementById('watt').value);
-            if (!kg || !w) return;
+            if (!kg || !w) { alert("Vänligen fyll i vikt och watt."); return; }
+            
             const vo2 = (1.8 * (w * 6.12) / kg) + 7;
             mets = vo2 / 3.5;
             info = `Baserat på maximal belastning (${vo2.toFixed(1)} ml/kg/min)`;
@@ -132,23 +252,35 @@
             dasiQuestions.forEach((_, i) => {
                 if (document.getElementById(`d${i}`).checked) dasiScore += dasiQuestions[i].val;
             });
-            // VO2 = (0.43 * DASI) + 9.6
             const vo2Est = (0.43 * dasiScore) + 9.6;
             mets = vo2Est / 3.5;
-            info = `Uppskattat via Dukes Activity Status Index (Score: ${dasiScore.toFixed(1)})`;
+            info = `Skattat via DASI (Score: ${dasiScore.toFixed(1)})`;
         }
 
         const resDiv = document.getElementById('result');
-        let color = mets < 5 ? "#e74c3c" : (mets < 10 ? "#f1c40f" : "#27ae60");
+        const badge = document.getElementById('status-badge');
+        
+        // Gränsvärden: <4 nedsatt (röd), 4-7 måttlig (gul), >7 god (grön)
+        let color = "#27ae60";
+        let status = "God kapacitet";
+        
+        if (mets < 4) {
+            color = "#e74c3c";
+            status = "Låg kapacitet";
+        } else if (mets < 7) {
+            color = "#f39c12"; // Orange/Gul
+            status = "Måttlig kapacitet";
+        }
         
         resDiv.style.display = 'block';
-        resDiv.style.backgroundColor = color + "15"; 
+        resDiv.style.backgroundColor = color + "10"; 
         resDiv.style.border = `2px solid ${color}`;
+        
+        badge.innerText = status;
+        badge.style.backgroundColor = color;
         
         document.getElementById('met-res').innerText = mets.toFixed(1);
         document.getElementById('met-res').style.color = color;
-        document.getElementById('status-text').innerText = mets < 4 ? "Låg kapacitet" : "Funktionell kapacitet";
-        document.getElementById('status-text').style.color = color;
         document.getElementById('extra-info').innerHTML = info;
     }
 </script>
